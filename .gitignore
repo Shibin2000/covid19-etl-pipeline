@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Env / secrets
+.env
+*.env
+
+# DuckDB
+*.db
+*.db.wal
+
+# Data
+*.parquet
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
