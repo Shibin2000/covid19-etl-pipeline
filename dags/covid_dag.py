@@ -43,8 +43,7 @@ def transform_clean(**ctx):
     raw_path = ctx["ti"].xcom_pull(key="raw_path")
     df = pd.read_parquet(raw_path)
 
-    # tried using all countries at first but the data quality varied a lot
-    # some countries had huge gaps in new_cases, sticking to the 9 most complete ones
+    # tried all countries first but a lot had huge data gaps, keeping the 9 most complete
     # filter to the 9 target countries only
     df = df[df["location"].isin(COUNTRIES)].copy()
     log.info("After country filter: %d rows", len(df))
@@ -167,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
