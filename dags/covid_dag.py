@@ -89,7 +89,7 @@ def spark_analysis(**ctx):
     sdf = spark.createDataFrame(df)
     sdf.createOrReplaceTempView("covid")
 
-    log.info("=== Total cases by country (from pyspark, cross-checked against duckdb after) ===")
+    log.info("=== Total cases by country ===")
     spark.sql("""
         SELECT location,
                MAX(total_cases) as total_cases,
@@ -166,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
