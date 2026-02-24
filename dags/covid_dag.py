@@ -100,7 +100,7 @@ def spark_analysis(**ctx):
         ORDER BY total_cases DESC
     """).show(truncate=False)
 
-    log.info("=== Monthly US trend ===")
+    log.info("=== monthly US trend ===")
     spark.sql("""
         SELECT YEAR(date) as yr, MONTH(date) as mo,
                SUM(new_cases) as monthly_cases
@@ -166,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
