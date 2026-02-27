@@ -119,7 +119,7 @@ def load_duckdb(**ctx):
     df = pd.read_parquet(clean_path)
 
     conn = duckdb.connect(DB_PATH)
-    # drop and recreate - this is a full refresh, not incremental`n    conn.execute("DROP TABLE IF EXISTS covid_data")
+    # full refresh for now, could make this incremental later`n    conn.execute("DROP TABLE IF EXISTS covid_data")
     conn.execute("CREATE TABLE covid_data AS SELECT * FROM df")
     n = conn.execute("SELECT COUNT(*) FROM covid_data").fetchone()[0]
     log.info("covid_data loaded: %d rows", n)
@@ -166,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
