@@ -137,7 +137,7 @@ def data_quality_checks(**ctx):
         if val != expected:
             failures.append(f"{label}: got {val}, expected {expected}")
 
-    # ran into a case where location was null for some aggregate rows in owid - this catches it`n    check("No null locations",    "SELECT COUNT(*) FROM covid_data WHERE location IS NULL")
+    # owid has some aggregate rows like 'World' and 'Europe' that slip through if you're not careful`n    check("No null locations",    "SELECT COUNT(*) FROM covid_data WHERE location IS NULL")
     check("No null dates",        "SELECT COUNT(*) FROM covid_data WHERE date IS NULL")
     check("No negative cases",    "SELECT COUNT(*) FROM covid_data WHERE new_cases < 0")
     check("9 countries present",  "SELECT COUNT(DISTINCT location) FROM covid_data", expected=9)
@@ -166,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
