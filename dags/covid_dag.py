@@ -26,7 +26,7 @@ COUNTRIES = [
 ]
 
 
-# learned this pattern from the weather pipeline - plain /tmp/covid_raw.parquet breaks concurrent runs`ndef _tmp(run_id: str, name: str) -> str:
+# plain /tmp/covid_raw.parquet breaks if you rerun - run-scoped path fixes it`ndef _tmp(run_id: str, name: str) -> str:
     """Run-scoped temp path so concurrent DAG runs don't clobber each other."""
     safe = run_id.replace(":", "_").replace("+", "_")
     return f"/tmp/covid_{safe}_{name}.parquet"
@@ -166,6 +166,7 @@ with DAG(
     t5 = PythonOperator(task_id="data_quality_checks", python_callable=data_quality_checks)
 
     t1 >> t2 >> t3 >> t4 >> t5
+
 
 
 
